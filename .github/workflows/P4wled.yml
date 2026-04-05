@@ -11,7 +11,7 @@ jobs:
       matrix:
         # Define the boards you want to compile for here. 
         # Common ones are esp32dev, d1_mini, nodemcuv2, esp32_eth
-        environment: [esp32dev, d1_mini] 
+        environment: [esp32p4_8MB_troyhacks_personal]
 
     steps:
     - name: Checkout target repository branch
