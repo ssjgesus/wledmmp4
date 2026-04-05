@@ -1,0 +1,41 @@
+name: Compile Troyhacks WLED P4_experimental
+
+# This allows you to trigger the workflow manually from the GitHub Actions tab
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Define the boards you want to compile for here. 
+        # Common ones are esp32dev, d1_mini, nodemcuv2, esp32_eth
+        environment: [esp32dev, d1_mini] 
+
+    steps:
+    - name: Checkout target repository branch
+      uses: actions/checkout@v4
+      with:
+        repository: troyhacks/WLED
+        ref: P4_experimental # The specific branch you want
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install PlatformIO Core
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U platformio
+
+    - name: Build WLED Firmware
+      run: pio run -e ${{ matrix.environment }}
+
+    - name: Upload Firmware Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: WLED_${{ matrix.environment }}_P4_experimental
+        path: .pio/build/${{ matrix.environment }}/firmware.bin
+        retention-days: 7
