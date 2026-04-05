@@ -29,23 +29,21 @@ jobs:
         find /tmp/WLEDtemp -maxdepth 1 -mindepth 1 -name "*" -type d >> /tmp/WLEDtemp/wledfoldername
         cd `cat /tmp/WLEDtemp/wledfoldername`
         npm install
-        echo '[env:custom_build]' >>platformio.ini
-        echo 'extends = env:esp32p4_8MB_troyhacks_personal' >>platformio.ini
         
-        pio run -e custom_build || pio run -e custom_build
+        pio run -e esp32p4_8MB_troyhacks_personal || pio run -e esp32p4_8MB_troyhacks_personal
     - name: Copy Files
       run: |
         cd $GITHUB_WORKSPACE
         git rm -r $GITHUB_WORKSPACE/*.bin || true
         WLEDFOLDERNAME=`cat /tmp/WLEDtemp/wledfoldername`
-        cp ${WLEDFOLDERNAME}/build_output/firmware/custom_build.bin $GITHUB_WORKSPACE/
+        cp ${WLEDFOLDERNAME}/build_output/firmware/esp32p4_8MB_troyhacks_personal.bin $GITHUB_WORKSPACE/
         date -I | tr -d '\n' >$GITHUB_WORKSPACE/last_update_date.txt
     - name: Commit Files
       run: |
         cd $GITHUB_WORKSPACE
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
-        git add $GITHUB_WORKSPACE/custom_build.bin
+        git add $GITHUB_WORKSPACE/esp32p4_8MB_troyhacks_personal.bin
         git add $GITHUB_WORKSPACE/last_update_date.txt
         git commit -m "Commit Custom Build"
         git push origin main
